@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux-store/hooks'
 import { fetchGetBooking } from '../../redux-store/bookingsSlice'
-import { Box, Button, CircularProgress, Paper, Typography } from '@mui/material'
+import { Button, CircularProgress } from '@mui/material'
 import Table from './Table/Table'
-import { HeaderPaper, LoaderBox, TablePaper } from './Table/Table.styled'
+import { LoaderBox, TablePaper } from './Table/Table.styled'
 import TableHeader from './TableHeader/TableHeader'
 
 

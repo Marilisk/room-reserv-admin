@@ -34,7 +34,6 @@ const bookingsSlice = createSlice({
         sortList(state, action:PayloadAction<{param: SortParamType }>) {
             state.sortBy = action.payload.param
             if (action.payload.param === 'createdAt' ) {
-                //console.log(new Date(state.items[0].createdAt).getTime())
                 state.items.sort((a, b) => {
                     const aTs = new Date(a?.createdAt || 0).getTime() 
                     const bTs = new Date(b?.createdAt || 0).getTime() 
@@ -45,8 +44,6 @@ const bookingsSlice = createSlice({
                     return a.startDate - b.startDate 
                 })
             }
-            /* const sorted = 
-            state.items = sorted */
         },
     },
     extraReducers: (builder) => {
@@ -62,7 +59,7 @@ const bookingsSlice = createSlice({
                 }
                 state.bookingsCount = action.payload.data.docsCount
             })
-            .addCase(fetchGetBooking.rejected, (state, action) => {
+            .addCase(fetchGetBooking.rejected, (state) => {
                 state.loadingStatus = 'error'
                 state.serverMsg = 'Не получилось загрузить бронирования, попробуйте перезагрузить страницу...'
             })

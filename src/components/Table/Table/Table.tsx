@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
 import { IBooking } from '../../../types/types'
-import { Box, Button, Checkbox, Divider, IconButton, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Divider, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material'
+// import { Box, Button, Checkbox, Divider, IconButton, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material'
 import ModalWindow from './ModalWindow/ModalWindow'
 import { useModal } from './Table.hooks'
 import { useAppDispatch } from '../../../redux-store/hooks'
@@ -29,11 +30,9 @@ const Table: FC<ITableProps> = ({ items }: ITableProps) => {
 
 
   return <>
-    {/* {!!chosen.length && */}
       <Box mt={2} mr={2} display='flex' justifyContent='flex-end' >
         <Button variant='outlined' onClick={handleDelete} disabled={!chosen.length}>удалить ({chosen.length})</Button>
       </Box>
-   {/*  } */}
 
     <List>
 
