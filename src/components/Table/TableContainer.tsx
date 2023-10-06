@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux-store/hooks'
 import { fetchGetBooking } from '../../redux-store/bookingsSlice'
-import { Button, CircularProgress } from '@mui/material'
+import { Button, CircularProgress, Typography } from '@mui/material'
 import Table from './Table/Table'
 import { LoaderBox, TablePaper } from './Table/Table.styled'
 import TableHeader from './TableHeader/TableHeader'
@@ -13,6 +13,8 @@ const TableContainer = () => {
   const dispatch = useAppDispatch()
   const bookings = useAppSelector(s => s.contracts.items)
   const isLoading = useAppSelector(s => s.contracts.loadingStatus === 'loading')
+  const isError = useAppSelector(s => s.contracts.loadingStatus === 'error')
+  const errMsg = useAppSelector(s => s.contracts.serverMsg)
   const areMoreBookings = useAppSelector(s => s.contracts.bookingsCount > s.contracts.items.length)
 
   const [count, setCount] = useState(5)
@@ -27,7 +29,7 @@ const TableContainer = () => {
     loadMore(true)
   }, [dispatch, count])
 
-  //if (isLoading) return <CircularProgress />
+  if (isError) return <Typography>{errMsg}</Typography>
 
   return <>    
     <TableHeader count={count} setCount={setCount} setSkip={setSkip} />

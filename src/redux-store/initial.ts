@@ -23,7 +23,7 @@ export const initialBookingState: BookingsInitStateType = {
         formState: {
             daysOfReservation: '3',
             guest: '',
-            price: 0,
+            price: 3000,
             roomNumber: 0,
             startDate: 0,
             note: '',

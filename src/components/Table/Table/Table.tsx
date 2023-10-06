@@ -9,13 +9,9 @@ import { fetchDeleteBooking } from '../../../redux-store/bookingsSlice'
 import DatesBlock from './DatesBlock/DatesBlock'
 
 
-
 interface ITableProps {
   items: IBooking[]
-
 }
-
-
 
 const Table: FC<ITableProps> = ({ items }: ITableProps) => {
 
@@ -60,15 +56,14 @@ const Table: FC<ITableProps> = ({ items }: ITableProps) => {
                     <Typography color='GrayText' /* textAlign='center' */ variant='subtitle1' fontWeight='600'>
                       комната {booking.roomNumber}</Typography>
                   </Box>
-                  <Typography variant='body2'>от {booking?.createdAt && new Date(booking?.createdAt).toLocaleDateString()}</Typography>
+                  <Typography variant='body2'>бронь от {booking?.createdAt && new Date(booking?.createdAt).toLocaleDateString()}</Typography>
                   <Divider orientation='vertical' variant='fullWidth' />
-                </>
-                }
+                </>}
               />
               <ListItemText sx={{/* border: '1px solid pink', */ flex: 5 }}
                 primary={
                   <Box>
-                    <Typography /* variant='h6' */>{booking.guest}</Typography>
+                    <Typography color='Highlight' /* variant='h6' */>{booking.guest}</Typography>
                   </Box>
                 }
                 secondary={ <DatesBlock startDate={booking.startDate} daysOfReservation={booking.daysOfReservation} /> } />

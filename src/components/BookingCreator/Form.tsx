@@ -10,15 +10,16 @@ import dayjs from 'dayjs';
 import { LineBox, StyledButton, StyledFormControl, StyledTextField } from './Form.styled'
 import { validate } from '../../utils/validate'
 
-const rooms = new Array(50).fill('').map((_, i) => i + 1)
+const rooms = new Array(30).fill('').map((_, i) => i + 1)
 
 
 const Form = () => {
 
     const values = useAppSelector(s => s.contracts.newItem.formState)
+    const [errors, setErrors] = useState<{ [k: string]: string }>({})
     const dispatch = useAppDispatch()
     const [btnDisabled, setBtnDisabled] = useState(false)
-    const loading = useAppSelector(s => s.contracts.loadingStatus === 'loading')
+    const loading = useAppSelector(s => s.contracts.newItem.loadingStatus === 'loading')
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof IBooking) => {
         dispatch(handleChangeForm({ ...values, [field]: e.currentTarget.value }))
@@ -26,11 +27,14 @@ const Form = () => {
 
     const handleSubmit = useCallback(() => {
         const errors = validate(values, ['guest', 'roomNumber', 'startDate', 'daysOfReservation', 'price'])
-        //console.log('values', values)
-        //console.log('errors', errors)
-        Object.keys(errors).length ? setBtnDisabled(true) : dispatch(fetchAddBooking(values))
+        if (Object.keys(errors).length) {
+            setBtnDisabled(true)
+            setErrors(errors)
+        } else {
+            dispatch(fetchAddBooking(values))
+            setErrors({})
+        }
     }, [values, dispatch])
-    
 
     useEffect(() => {
         // для удобства ставим текущую дату в датапикер
@@ -55,6 +59,7 @@ const Form = () => {
                         id="demo-simple-select-required"
                         value={values.roomNumber}
                         label="номер апартаментов*"
+                        error={!!errors.roomNumber}
                         onChange={(e) => {
                             dispatch(handleChangeForm({ ...values, roomNumber: e.target.value as number }))
                         }}
@@ -65,7 +70,10 @@ const Form = () => {
                     </Select>
                 </StyledFormControl>
 
-                <StyledTextField fullWidth value={values.price} onChange={(e) => onChange(e, 'price')} label='стоимость' />
+                <StyledTextField fullWidth value={values.price}
+                    error={!!errors.price}
+                    onChange={(e) => onChange(e, 'price')}
+                    label='стоимость' type='number' />
             </LineBox>
 
             <LineBox >
@@ -79,14 +87,24 @@ const Form = () => {
                         const timeStamp = newValue?.toDate().getTime()
                         if (timeStamp) dispatch(handleChangeForm({ ...values, startDate: timeStamp }))
                     }} />
-                <StyledTextField fullWidth value={values.daysOfReservation} onChange={(e) => {
-                    console.log('typeof', typeof +(e.currentTarget.value))
-                    onChange(e, 'daysOfReservation')
-                } } label='дней пребывания' type='number' />
+                <StyledTextField fullWidth
+                    value={values.daysOfReservation}
+                    onChange={(e) => onChange(e, 'daysOfReservation')}
+                    label='дней пребывания'
+                    error={!!errors.daysOfReservation || +values.daysOfReservation > 200 }
+                    type='number' />
             </LineBox>
 
             <LineBox >
-                <StyledTextField fullWidth value={values.guest} onChange={(e) => onChange(e, 'guest')} label='имя и фамилия гостя' />
+                <StyledTextField
+                    required
+                    fullWidth
+                    value={values.guest}
+                    onChange={(e) => onChange(e, 'guest')}
+                    label='имя и фамилия гостя'
+                    type='text'
+                    error={!!errors.guest}
+                />
             </LineBox>
 
             <LineBox >
@@ -94,7 +112,6 @@ const Form = () => {
             </LineBox>
 
             <LineBox>
-               
                 <StyledButton type='submit'
                     onClick={handleSubmit}
                     variant='outlined'

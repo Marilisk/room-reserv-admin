@@ -11,7 +11,7 @@ const DatesBlock: FC<IDatesBlockProps> = ({ daysOfReservation, startDate }: IDat
     return (
         <Box sx={{display: 'flex'}}>
             <Typography variant='body2'>{daysOfReservation} дней:&nbsp; </Typography>
-            <Typography variant='body2'>{new Date(startDate).toLocaleDateString()}</Typography> -
+            <Typography variant='body2'>{new Date(startDate).toLocaleDateString()}</Typography>&nbsp;-&nbsp;
             <Typography variant='body2'>{new Date(startDate + (Number(daysOfReservation) * 86400000)).toLocaleDateString()}</Typography>
         </Box>
     )

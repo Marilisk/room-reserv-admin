@@ -7,20 +7,20 @@ import { createSelector } from '@reduxjs/toolkit'
 
 
 export const fetchGetBooking = createAsyncThunk(
-        'booking/fetchGetBooking', 
-        async ({count, skip, rewrite}: IGetPayload ) => {
-    const response = await instance.get(`/bookings/${count}/${skip}`)
-    return {data: response.data, rewrite}
-})
+    'booking/fetchGetBooking',
+    async ({ count, skip, rewrite }: IGetPayload) => {
+        const response = await instance.get(`/bookings/${count}/${skip}`)
+        return { data: response.data, rewrite }
+    })
 
 export const fetchAddBooking = createAsyncThunk('booking/fetchAddBooking', async (payload: IBookingPayload) => {
     const response = await instance.post('/bookings', payload)
     return response.data
 })
 
-export const fetchDeleteBooking = createAsyncThunk('booking/fetchDeleteBooking', async ({ids}:IDeletePayload) => {
-    const response = await instance.post(`/bookings/delete`, ids )
-    return response.data
+export const fetchDeleteBooking = createAsyncThunk('booking/fetchDeleteBooking', async ({ ids }: IDeletePayload) => {
+    const response = await instance.post(`/bookings/delete`, ids)
+    return {data: response.data, ids}
 })
 
 
@@ -28,20 +28,20 @@ const bookingsSlice = createSlice({
     name: 'booking',
     initialState: initialBookingState,
     reducers: {
-        handleChangeForm (state, action: PayloadAction<IBookingPayload>) {
+        handleChangeForm(state, action: PayloadAction<IBookingPayload>) {
             state.newItem.formState = action.payload
         },
-        sortList(state, action:PayloadAction<{param: SortParamType }>) {
+        sortList(state, action: PayloadAction<{ param: SortParamType }>) {
             state.sortBy = action.payload.param
-            if (action.payload.param === 'createdAt' ) {
+            if (action.payload.param === 'createdAt') {
                 state.items.sort((a, b) => {
-                    const aTs = new Date(a?.createdAt || 0).getTime() 
-                    const bTs = new Date(b?.createdAt || 0).getTime() 
-                    return aTs - bTs 
+                    const aTs = new Date(a?.createdAt || 0).getTime()
+                    const bTs = new Date(b?.createdAt || 0).getTime()
+                    return aTs - bTs
                 })
             } else {
                 state.items.sort((a, b) => {
-                    return a.startDate - b.startDate 
+                    return a.startDate - b.startDate
                 })
             }
         },
@@ -53,9 +53,9 @@ const bookingsSlice = createSlice({
             .addCase(fetchGetBooking.fulfilled, (state, action) => {
                 state.loadingStatus = 'loaded'
                 if (action.payload.rewrite) {
-                    state.items = action.payload.data.bookings 
+                    state.items = action.payload.data.bookings
                 } else {
-                    state.items = [...state.items, ...action.payload.data.bookings];   
+                    state.items = [...state.items, ...action.payload.data.bookings];
                 }
                 state.bookingsCount = action.payload.data.docsCount
             })
@@ -65,14 +65,22 @@ const bookingsSlice = createSlice({
             })
 
             .addCase(fetchAddBooking.pending, (state) => {
-                state.loadingStatus = 'loading'
+                state.newItem.loadingStatus = 'loading'
             })
             .addCase(fetchAddBooking.fulfilled, (state, action) => {
-                state.loadingStatus = 'loaded'
+                state.newItem.loadingStatus = 'loaded'
                 state.items.push(action.payload);
+                state.newItem.formState = {
+                    ...state.newItem.formState,
+                    daysOfReservation: '3',
+                    guest: '',
+                    price: 3000,
+                    roomNumber: 0,
+                    note: '',
+                }
             })
             .addCase(fetchAddBooking.rejected, (state) => {
-                state.loadingStatus = 'error'
+                state.newItem.loadingStatus = 'error'
                 state.serverMsg = 'Не получилось сделать бронирование, попробуйте еще разок...'
             })
 
@@ -81,7 +89,7 @@ const bookingsSlice = createSlice({
             })
             .addCase(fetchDeleteBooking.fulfilled, (state, action) => {
                 state.loadingStatus = 'loaded'
-                state.items = state.items.filter(el => el._id !== action.payload._id);
+                state.items = state.items.filter(el => action.payload.ids.indexOf(el._id) === -1 );
             })
             .addCase(fetchDeleteBooking.rejected, (state) => {
                 state.loadingStatus = 'error'
@@ -91,8 +99,8 @@ const bookingsSlice = createSlice({
 
 });
 
-const selectItems = (state:RootState) => state.contracts.items
-export const selectBooking = createSelector(selectItems, (items) => items )
+const selectItems = (state: RootState) => state.contracts.items
+export const selectBooking = createSelector(selectItems, (items) => items)
 
 export const { handleChangeForm, sortList } = bookingsSlice.actions;
 
