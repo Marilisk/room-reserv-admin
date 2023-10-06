@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export const API_URL = 'http://localhost:80'
+//export const API_URL = 'http://localhost:80'
+export const API_URL = 'https://secondapi.spboptis.ru:3443'
+
 
 const API_SECRET = import.meta.env.VITE_API_SECRET
 

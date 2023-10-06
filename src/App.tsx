@@ -1,6 +1,7 @@
-import { Box, Tab, Tabs } from '@mui/material'
+import { Tab, Tabs, Typography } from '@mui/material'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { pages } from './router/pages';
+import { TabBox, TabsBox, WrapBox } from './App.styled';
 
 
 function App() {
@@ -9,19 +10,26 @@ function App() {
   const navigate = useNavigate()
 
   return (
-    <Box sx={{ margin: '50px auto', background: 'background.paper', display: 'flex', flexDirection: 'column', alignItems: 'center' }}  >
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: '50px' }} >
+    <WrapBox>
+      <TabsBox>
         <Tabs value={location.pathname} centered >
           {
             pages.map((page, i) => (
-              <Tab key={i} label={page.value} value={page.link}
+              <Tab key={i}
+                label={
+                  <TabBox>
+                    {page.icon}
+                    <Typography ml={2} > {page.value}</Typography>
+                  </TabBox>
+                }
+                value={page.link}
                 onClick={() => navigate(page.link)} />
             ))
           }
         </Tabs>
-      </Box>
+      </TabsBox>
       <Outlet />
-    </Box>
+    </WrapBox>
   )
 }
 

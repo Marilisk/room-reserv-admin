@@ -24,18 +24,13 @@ const Form = () => {
         dispatch(handleChangeForm({ ...values, [field]: e.currentTarget.value }))
     }
 
-    /* const handleSubmit = useCallback(() => {
-        const errors = validate(values, ['guest', 'roomNumber', 'startDate', 'daysOfReservation'])
-        console.log(values)
-        console.log('errors', errors)
+    const handleSubmit = useCallback(() => {
+        const errors = validate(values, ['guest', 'roomNumber', 'startDate', 'daysOfReservation', 'price'])
+        //console.log('values', values)
+        //console.log('errors', errors)
         Object.keys(errors).length ? setBtnDisabled(true) : dispatch(fetchAddBooking(values))
-    }, [values, dispatch]) */
-    const handleSubmit = () => {
-        const errors = validate(values, ['guest', 'roomNumber', 'startDate', 'daysOfReservation'])
-        console.log(values)
-        console.log('errors', errors)
-        Object.keys(errors).length ? setBtnDisabled(true) : dispatch(fetchAddBooking(values))
-    }
+    }, [values, dispatch])
+    
 
     useEffect(() => {
         // для удобства ставим текущую дату в датапикер
@@ -76,6 +71,7 @@ const Form = () => {
             <LineBox >
                 <DatePicker
                     sx={{ margin: '10px 20px', flex: 1 }}
+                    disablePast
                     label='дата заезда'
                     format='DD-MM-YYYY'
                     value={dayjs(new Date(values.startDate))}
