@@ -7,7 +7,6 @@ import { LoaderBox, TablePaper } from './Table/Table.styled'
 import TableHeader from './TableHeader/TableHeader'
 
 
-
 const TableContainer = () => {
 
   const dispatch = useAppDispatch()
@@ -36,7 +35,7 @@ const TableContainer = () => {
 
     <TablePaper>
 
-      <Table items={bookings} />
+      <Table items={bookings} areMoreBookings={areMoreBookings}  />
       {areMoreBookings &&
         <LoaderBox>
           {

@@ -11,9 +11,11 @@ import { HeadBox } from './Table.styled'
 
 interface ITableProps {
   items: IBooking[]
+  clickable?: boolean
+  areMoreBookings?: boolean
 }
 
-const Table: FC<ITableProps> = ({ items }: ITableProps) => {
+const Table: FC<ITableProps> = ({ items, clickable = true, areMoreBookings = true }: ITableProps) => {
 
   const dispatch = useAppDispatch()
   const [chosen, setChosen] = useState<string[]>([])
@@ -32,9 +34,9 @@ const Table: FC<ITableProps> = ({ items }: ITableProps) => {
     </HeadBox>
 
     <List>
-      
+
       {bookingInViewId &&
-        <ModalWindow modalOpened={modalOpened} handleClose={handleClose} bookingInViewId={bookingInViewId} />
+        <ModalWindow modalOpened={modalOpened} handleClose={handleClose} bookingInViewId={bookingInViewId} areMoreBookings={areMoreBookings} />
       }
 
       {
@@ -52,18 +54,18 @@ const Table: FC<ITableProps> = ({ items }: ITableProps) => {
             disablePadding
           >
             <ListItemButton sx={{ display: 'flex' }}
-              onClick={() => handleOpen(booking._id)}>
+              onClick={() => clickable && handleOpen(booking._id)}>
               <ListItemText sx={{ flex: 2 }}
                 primary={<>
-                  <Box sx={{ marginRight: '20px' /* border: '1px solid red' */ }}>
-                    <Typography color='GrayText' /* textAlign='center' */ variant='subtitle1' fontWeight='600'>
+                  <Box sx={{ marginRight: '20px' }}>
+                    <Typography color='GrayText' variant='subtitle1' fontWeight='600'>
                       комната {booking.roomNumber}</Typography>
                   </Box>
                   <Typography variant='body2'>бронь от {booking?.createdAt && new Date(booking?.createdAt).toLocaleDateString()}</Typography>
                   <Divider orientation='vertical' variant='fullWidth' />
                 </>}
               />
-              <ListItemText sx={{/* border: '1px solid pink', */ flex: 5 }}
+              <ListItemText sx={{ flex: 5 }}
                 primary={
                   <Box>
                     <Typography color='Highlight' /* variant='h6' */>{booking.guest}</Typography>

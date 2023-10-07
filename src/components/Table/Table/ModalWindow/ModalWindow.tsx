@@ -12,9 +12,10 @@ interface IModalProps {
   modalOpened: boolean
   handleClose: () => void
   bookingInViewId: string
+  areMoreBookings: boolean
 }
 
-const ModalWindow: FC<IModalProps> = ({ modalOpened, handleClose, bookingInViewId }: IModalProps) => {
+const ModalWindow: FC<IModalProps> = ({ modalOpened, handleClose, bookingInViewId, areMoreBookings }: IModalProps) => {
 
   const bookings = useAppSelector(selectBooking)
 
@@ -72,11 +73,14 @@ const ModalWindow: FC<IModalProps> = ({ modalOpened, handleClose, bookingInViewI
           </Typography>
         </LineBox>
 
-        <LineBox>
-          <Button type='button' variant='contained' sx={{ m: '0 auto' }} onClick={() => findOverLaps()}>
-            найти конфликты
-          </Button>
-        </LineBox>
+        {!areMoreBookings &&
+          <LineBox>
+            <Button type='button' variant='contained' sx={{ m: '0 auto' }} onClick={() => findOverLaps()}>
+              найти конфликты
+            </Button>
+          </LineBox>
+        }
+
 
         {
           showOverLaps &&
@@ -85,7 +89,7 @@ const ModalWindow: FC<IModalProps> = ({ modalOpened, handleClose, bookingInViewI
               !!overlaps.length ?
                 <>
                   <Typography variant='h5' mt={4} textAlign='center'>Пересекающиеся бронирования:</Typography>
-                  <Table items={overlaps} />
+                  <Table items={overlaps} clickable={false} />
                 </>
                 :
                 <Typography variant='h5' mt={4} textAlign='center'>Пересечений не найдено</Typography>

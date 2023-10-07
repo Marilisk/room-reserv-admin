@@ -53,7 +53,7 @@ const Form = () => {
     useEffect(() => {
         // убираем по таймеру сообщение об успехе 
         setServerMsg(srvMsg)
-        const timer = setTimeout(() => setServerMsg(undefined), 4000)
+        const timer = setTimeout(() => setServerMsg(undefined), 2500)
         return () => clearTimeout(timer)
     }, [srvMsg, loading])
 
