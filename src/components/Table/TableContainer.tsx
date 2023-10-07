@@ -21,8 +21,8 @@ const TableContainer = () => {
   const [skip, setSkip] = useState(0)
 
   const loadMore = (rewrite: boolean) => {
-      dispatch(fetchGetBooking({ count, skip, rewrite }))
-      setSkip(rewrite ? 0 : skip + count)   
+    dispatch(fetchGetBooking({ count, skip, rewrite }))
+    setSkip(rewrite ? 0 : skip + count)
   }
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const TableContainer = () => {
 
   if (isError) return <Typography>{errMsg}</Typography>
 
-  return <>    
+  return <>
     <TableHeader count={count} setCount={setCount} setSkip={setSkip} />
 
     <TablePaper>
@@ -39,10 +39,10 @@ const TableContainer = () => {
       <Table items={bookings} />
       {areMoreBookings &&
         <LoaderBox>
-
-          <Button type='button' variant='contained' onClick={() => loadMore(false)} >загрузить следующие</Button>
-
-          {isLoading && <CircularProgress size={80} />}
+          {
+            isLoading ? <CircularProgress size={80} /> :
+              <Button type='button' variant='contained' onClick={() => loadMore(false)} >загрузить следующие</Button>
+          }
         </LoaderBox>
       }
     </TablePaper>

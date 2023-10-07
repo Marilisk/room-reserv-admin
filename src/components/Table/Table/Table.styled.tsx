@@ -1,6 +1,14 @@
 import { Box, styled, Paper } from "@mui/material";
 
 
+export const HeadBox = styled(Box)({
+    margin: '16px', 
+    marginBottom: '0',
+    display: 'flex',
+    justifyContent: 'flex-end', 
+}) as typeof Box
+
+
 export const LineBox = styled(Box)({
     display: 'flex',
     alignItems: 'center',
@@ -18,7 +26,6 @@ export const modalStyles = {
     boxShadow: 24,
     padding: 4,
 }
-
 
 export const LoaderBox = styled(Box)({
     display: 'flex',

@@ -11,6 +11,7 @@ interface BookingsInitStateType {
         formState: IBookingPayload
         loadingStatus: IsLoadingType
     }
+    overlaps: IBooking[]
 }
 
 export const initialBookingState: BookingsInitStateType = {
@@ -29,5 +30,6 @@ export const initialBookingState: BookingsInitStateType = {
             note: '',
         },
         loadingStatus: 'loaded',
-    }
+    },
+    overlaps: [],
 }

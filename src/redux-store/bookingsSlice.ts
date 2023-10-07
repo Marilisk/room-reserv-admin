@@ -45,6 +45,9 @@ const bookingsSlice = createSlice({
                 })
             }
         },
+        setOverlaps(state, action) {
+            state.overlaps = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchGetBooking.pending, (state) => {
@@ -78,6 +81,7 @@ const bookingsSlice = createSlice({
                     roomNumber: 0,
                     note: '',
                 }
+                state.serverMsg = 'Бронирование успешно создано'
             })
             .addCase(fetchAddBooking.rejected, (state) => {
                 state.newItem.loadingStatus = 'error'
@@ -90,6 +94,7 @@ const bookingsSlice = createSlice({
             .addCase(fetchDeleteBooking.fulfilled, (state, action) => {
                 state.loadingStatus = 'loaded'
                 state.items = state.items.filter(el => action.payload.ids.indexOf(el._id) === -1 );
+                state.overlaps = state.overlaps.filter(el => action.payload.ids.indexOf(el._id) === -1 );
             })
             .addCase(fetchDeleteBooking.rejected, (state) => {
                 state.loadingStatus = 'error'
@@ -102,6 +107,6 @@ const bookingsSlice = createSlice({
 const selectItems = (state: RootState) => state.contracts.items
 export const selectBooking = createSelector(selectItems, (items) => items)
 
-export const { handleChangeForm, sortList } = bookingsSlice.actions;
+export const { handleChangeForm, sortList, setOverlaps } = bookingsSlice.actions;
 
 export default bookingsSlice.reducer;

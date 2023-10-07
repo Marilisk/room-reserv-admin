@@ -1,5 +1,4 @@
-import { Box, Button, FormControl, TextField, styled } from '@mui/material'
-
+import { Box, Button, FormControl, Paper, TextField, styled } from '@mui/material'
 
 
 export const StyledTextField = styled(TextField)({
@@ -21,4 +20,9 @@ export const StyledFormControl = styled(FormControl)({
 export const StyledButton = styled(Button)({
     margin: '20px 20px 10px 20px', 
 }) as typeof Button
+
+export const WrapPaper = styled(Paper)({
+    width: '60%', 
+    padding: '20px'
+}) as typeof Paper
 

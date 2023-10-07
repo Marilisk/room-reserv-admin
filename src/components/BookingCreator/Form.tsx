@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux-store/hooks'
-import { InputLabel, MenuItem, Select } from '@mui/material'
+import { Box, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import { IBooking } from '../../types/types'
 import { fetchAddBooking, handleChangeForm } from '../../redux-store/bookingsSlice'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -12,7 +12,6 @@ import { validate } from '../../utils/validate'
 
 const rooms = new Array(30).fill('').map((_, i) => i + 1)
 
-
 const Form = () => {
 
     const values = useAppSelector(s => s.contracts.newItem.formState)
@@ -20,6 +19,8 @@ const Form = () => {
     const dispatch = useAppDispatch()
     const [btnDisabled, setBtnDisabled] = useState(false)
     const loading = useAppSelector(s => s.contracts.newItem.loadingStatus === 'loading')
+    const srvMsg = useAppSelector(s => s.contracts.serverMsg)
+    const [serverMsg, setServerMsg] = useState<string | undefined | null>()
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, field: keyof IBooking) => {
         dispatch(handleChangeForm({ ...values, [field]: e.currentTarget.value }))
@@ -43,8 +44,18 @@ const Form = () => {
 
     useEffect(() => {
         // для раздизейблинга кнопки после неудачной попытки сабмита
-        btnDisabled && setBtnDisabled(false)
+        if (btnDisabled) {
+            setBtnDisabled(false)
+            setErrors({})
+        }
     }, [values])
+
+    useEffect(() => {
+        // убираем по таймеру сообщение об успехе 
+        setServerMsg(srvMsg)
+        const timer = setTimeout(() => setServerMsg(undefined), 4000)
+        return () => clearTimeout(timer)
+    }, [srvMsg, loading])
 
 
     return (
@@ -73,7 +84,7 @@ const Form = () => {
                 <StyledTextField fullWidth value={values.price}
                     error={!!errors.price}
                     onChange={(e) => onChange(e, 'price')}
-                    label='стоимость' type='number' />
+                    label='стоимость, руб.' type='number' />
             </LineBox>
 
             <LineBox >
@@ -81,7 +92,7 @@ const Form = () => {
                     sx={{ margin: '10px 20px', flex: 1 }}
                     disablePast
                     label='дата заезда'
-                    format='DD-MM-YYYY'
+                    format='DD.MM.YYYY'
                     value={dayjs(new Date(values.startDate))}
                     onChange={(newValue) => {
                         const timeStamp = newValue?.toDate().getTime()
@@ -91,8 +102,17 @@ const Form = () => {
                     value={values.daysOfReservation}
                     onChange={(e) => onChange(e, 'daysOfReservation')}
                     label='дней пребывания'
-                    error={!!errors.daysOfReservation || +values.daysOfReservation > 200 }
+                    error={!!errors.daysOfReservation || +values.daysOfReservation > 200}
                     type='number' />
+
+            </LineBox>
+            <LineBox>
+                <Box sx={{ flex: 1, margin: '10px 20px', display: 'flex' }}>
+                    <Typography fontWeight='600' color='GrayText'>дата отъезда:&nbsp;</Typography>
+                    <Typography fontWeight='600' color='GrayText'>
+                        {new Date((+values.daysOfReservation * 86400000) + values.startDate).toLocaleDateString()}
+                    </Typography>
+                </Box>
             </LineBox>
 
             <LineBox >
@@ -109,6 +129,10 @@ const Form = () => {
 
             <LineBox >
                 <StyledTextField fullWidth value={values.note} onChange={(e) => onChange(e, 'note')} label='примечание' multiline />
+            </LineBox>
+
+            <LineBox>
+                {serverMsg && <Typography fontWeight='600' color='Highlight'>{srvMsg}</Typography>}
             </LineBox>
 
             <LineBox>

@@ -1,22 +1,31 @@
 import { FC } from 'react'
-import { Backdrop, Box, Divider, Fade, Modal, Typography, } from '@mui/material'
+import { Backdrop, Box, Divider, Fade, Modal, Typography, Button } from '@mui/material'
 import { useAppSelector } from '../../../../redux-store/hooks'
 import { selectBooking } from '../../../../redux-store/bookingsSlice'
 import { priceFormatter } from '../../../../utils/priceFromatter'
 import { LineBox, modalStyles } from '../Table.styled'
+import Table from '../Table'
+import { useOverlaps } from './ModalWindow.hooks'
 
 
 interface IModalProps {
   modalOpened: boolean
   handleClose: () => void
-  bookingInViewId?: string
+  bookingInViewId: string
 }
 
 const ModalWindow: FC<IModalProps> = ({ modalOpened, handleClose, bookingInViewId }: IModalProps) => {
 
   const bookings = useAppSelector(selectBooking)
 
+  const {
+    overlaps,
+    findOverLaps,
+    showOverLaps,
+  } = useOverlaps(bookingInViewId, bookings)
+
   const currentItem = bookings.find(el => el._id === bookingInViewId)
+
   if (!bookingInViewId || !currentItem) return null
 
   return <Modal
@@ -62,6 +71,27 @@ const ModalWindow: FC<IModalProps> = ({ modalOpened, handleClose, bookingInViewI
             {priceFormatter(currentItem.price)}
           </Typography>
         </LineBox>
+
+        <LineBox>
+          <Button type='button' variant='contained' sx={{ m: '0 auto' }} onClick={() => findOverLaps()}>
+            найти конфликты
+          </Button>
+        </LineBox>
+
+        {
+          showOverLaps &&
+          <>
+            {
+              !!overlaps.length ?
+                <>
+                  <Typography variant='h5' mt={4} textAlign='center'>Пересекающиеся бронирования:</Typography>
+                  <Table items={overlaps} />
+                </>
+                :
+                <Typography variant='h5' mt={4} textAlign='center'>Пересечений не найдено</Typography>
+            }
+          </>
+        }
       </Box>
     </Fade>
   </Modal>

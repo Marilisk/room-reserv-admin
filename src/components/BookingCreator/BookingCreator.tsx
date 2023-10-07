@@ -1,12 +1,12 @@
 import Form from './Form'
-import { Paper } from '@mui/material'
+import { WrapPaper } from './Form.styled'
 
 export const BookingCreator = () => {
 
   return (
-    <Paper sx={{width: '60%', padding: '20px'}}>
+    <WrapPaper>
         <Form />
-    </Paper>
+    </WrapPaper>
   )
 }
 

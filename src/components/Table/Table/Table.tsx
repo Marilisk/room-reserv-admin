@@ -1,12 +1,12 @@
 import { FC, useState } from 'react'
 import { IBooking } from '../../../types/types'
 import { Box, Button, Checkbox, Divider, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material'
-// import { Box, Button, Checkbox, Divider, IconButton, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material'
 import ModalWindow from './ModalWindow/ModalWindow'
 import { useModal } from './Table.hooks'
 import { useAppDispatch } from '../../../redux-store/hooks'
 import { fetchDeleteBooking } from '../../../redux-store/bookingsSlice'
 import DatesBlock from './DatesBlock/DatesBlock'
+import { HeadBox } from './Table.styled'
 
 
 interface ITableProps {
@@ -22,17 +22,20 @@ const Table: FC<ITableProps> = ({ items }: ITableProps) => {
 
   const handleDelete = () => {
     dispatch(fetchDeleteBooking({ ids: chosen }))
+    setChosen([])
   }
 
 
   return <>
-      <Box mt={2} mr={2} display='flex' justifyContent='flex-end' >
-        <Button variant='outlined' onClick={handleDelete} disabled={!chosen.length}>удалить ({chosen.length})</Button>
-      </Box>
+    <HeadBox>
+      <Button variant='outlined' color='error' onClick={handleDelete} disabled={!chosen.length}>удалить ({chosen.length})</Button>
+    </HeadBox>
 
     <List>
-
-      <ModalWindow modalOpened={modalOpened} handleClose={handleClose} bookingInViewId={bookingInViewId} />
+      
+      {bookingInViewId &&
+        <ModalWindow modalOpened={modalOpened} handleClose={handleClose} bookingInViewId={bookingInViewId} />
+      }
 
       {
         items.map((booking) => <>
@@ -42,7 +45,7 @@ const Table: FC<ITableProps> = ({ items }: ITableProps) => {
             secondaryAction={
               <Checkbox
                 edge="end"
-                onChange={() => chosen.includes(booking._id) ? setChosen(chosen.filter(el => el !== booking._id )) : setChosen([...chosen, booking._id])}
+                onChange={() => chosen.includes(booking._id) ? setChosen(chosen.filter(el => el !== booking._id)) : setChosen([...chosen, booking._id])}
                 checked={chosen.includes(booking._id)}
               />
             }
@@ -66,7 +69,7 @@ const Table: FC<ITableProps> = ({ items }: ITableProps) => {
                     <Typography color='Highlight' /* variant='h6' */>{booking.guest}</Typography>
                   </Box>
                 }
-                secondary={ <DatesBlock startDate={booking.startDate} daysOfReservation={booking.daysOfReservation} /> } />
+                secondary={<DatesBlock startDate={booking.startDate} daysOfReservation={booking.daysOfReservation} />} />
             </ListItemButton>
           </ListItem>
           <Divider variant="fullWidth" component="li" />
