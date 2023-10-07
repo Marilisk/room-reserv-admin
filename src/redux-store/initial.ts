@@ -1,4 +1,4 @@
-import { IBooking, IBookingPayload, IsLoadingType, SortParamType } from "../types/types"
+import { IBooking, IBookingPayload, ISortTag, IsLoadingType, SortParamType } from "../types/types"
 
 
 interface BookingsInitStateType {
@@ -33,3 +33,14 @@ export const initialBookingState: BookingsInitStateType = {
     },
     overlaps: [],
 }
+
+export const sortTags: ISortTag[] = [
+    {
+        label: "По дате создания",
+        value: 'createdAt'
+    },
+    {
+        label: "По дате заезда",
+        value: 'startDate'
+    },
+]

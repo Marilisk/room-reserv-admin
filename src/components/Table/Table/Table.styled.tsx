@@ -2,10 +2,10 @@ import { Box, styled, Paper } from "@mui/material";
 
 
 export const HeadBox = styled(Box)({
-    margin: '16px', 
+    margin: '16px',
     marginBottom: '0',
     display: 'flex',
-    justifyContent: 'flex-end', 
+    justifyContent: 'flex-end',
 }) as typeof Box
 
 
@@ -15,29 +15,20 @@ export const LineBox = styled(Box)({
     margin: '10px'
 }) as typeof Box
 
-export const modalStyles = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    borderRadius: '8px',
-    boxShadow: 24,
-    padding: 4,
-}
-
 export const LoaderBox = styled(Box)({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     margin: '10px',
-    height: '80px', 
+    height: '80px',
     width: '100%',
 }) as typeof Box
 
 export const TablePaper = styled(Paper)({
-    width: '68%'
+    width: '68%',
+    '@media (max-width: 990px)': {
+        width: '90%',
+    }
 }) as typeof Box
 
 export const HeaderPaper = styled(Paper)({
@@ -47,6 +38,12 @@ export const HeaderPaper = styled(Paper)({
     boxSizing: 'border-box',
     display: 'flex',
     justifyContent: 'space-between',
+    '@media (max-width: 990px)': {
+        width: '90%',
+    },
+    '@media (max-width: 750px)': {
+        display: 'block',
+    },
 }) as typeof Box
 
 

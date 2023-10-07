@@ -3,26 +3,14 @@ import { HeaderPaper } from '../Table/Table.styled'
 import { Typography, Stack, Chip } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../../redux-store/hooks'
 import { sortList } from '../../../redux-store/bookingsSlice'
-import { ISortTag, SortParamType } from '../../../types/types'
+import { SortParamType } from '../../../types/types'
+import { sortTags } from '../../../redux-store/initial'
 
 interface ITableHeaderProps {
     count: number
     setCount: (arg: number) => void
     setSkip: (arg: number) => void
 }
-
-
-const sortTags: ISortTag[] = [
-    {
-        label: "По дате создания",
-        value: 'createdAt'
-    },
-    {
-        label: "По дате заезда",
-        value: 'startDate'
-    },
-]
-
 
 const TableHeader: FC<ITableHeaderProps> = ({ count, setCount, setSkip }: ITableHeaderProps) => {
 
@@ -43,13 +31,13 @@ const TableHeader: FC<ITableHeaderProps> = ({ count, setCount, setSkip }: ITable
     return (
         <HeaderPaper>
 
-            <Stack direction="row" spacing={1} alignItems='center' >
+            <Stack direction="row" spacing={1} alignItems='center' mr={3}>
                 <Typography fontSize='small' color='GrayText'>показывать: </Typography>
                 <Chip label="Все" onClick={() => changeView(bookingsCount)} variant={count === bookingsCount ? 'filled' : "outlined"} />
                 <Chip label="По 5 элементов" variant={count === 5 ? 'filled' : "outlined"} onClick={() => changeView(5)} />
             </Stack>
 
-            <Stack direction="row" spacing={1} alignItems='center' ml={3}>
+            <Stack direction="row" spacing={1} alignItems='center' >
                 <Typography fontSize='small' color='GrayText'>сортировка: </Typography>
                 {sortTags.map((elem, i) => (
                     <Chip key={i}

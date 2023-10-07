@@ -35,7 +35,7 @@ const TableContainer = () => {
 
     <TablePaper>
 
-      <Table items={bookings} areMoreBookings={areMoreBookings}  />
+      <Table items={bookings} />
       {areMoreBookings &&
         <LoaderBox>
           {

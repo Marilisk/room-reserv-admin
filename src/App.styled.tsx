@@ -6,12 +6,12 @@ export const WrapBox = styled(Box)({
     background: 'background.paper', 
     display: 'flex', 
     flexDirection: 'column', 
-    alignItems: 'center'
+    alignItems: 'center',
 }) as typeof Box
 
 export const TabsBox = styled(Box)({
     borderBottom: '1px solid #E0E0E0',
-    marginBottom: '50px'
+    marginBottom: '50px',
 }) as typeof Box
 
 export const TabBox = styled(Box)({
