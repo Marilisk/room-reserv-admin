@@ -28,14 +28,16 @@ const TableLine: FC<ITableLineProps> = ({ booking, checked, handleCheck, handleO
             <ListItemButton sx={{ display: 'flex' }}
                 onClick={() => handleOpen && handleOpen(booking._id)}>
                 <ListItemText sx={{ flex: 2 }}
-                    primary={<>
-                        <Box sx={{ marginRight: '20px' }}>
-                            <Typography color='GrayText' variant='subtitle1' fontWeight='600'>
-                                комната {booking.roomNumber}</Typography>
-                        </Box>
-                        <Typography variant='body2'>бронь от {booking?.createdAt && new Date(booking?.createdAt).toLocaleDateString()}</Typography>
-                        <Divider orientation='vertical' variant='fullWidth' />
-                    </>}
+                    primary={
+                        <>
+                            <Box sx={{ marginRight: '20px' }}>
+                                <Typography color='GrayText' variant='subtitle1' fontWeight='600'>
+                                    комната {booking.roomNumber}</Typography>
+                            </Box>
+                            <Typography variant='body2'>бронь от {booking?.createdAt && new Date(booking?.createdAt).toLocaleDateString()}</Typography>
+                            <Divider orientation='vertical' variant='fullWidth' />
+                        </>
+                    }
                 />
                 <ListItemText sx={{ flex: 5 }}
                     primary={

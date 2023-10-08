@@ -34,7 +34,6 @@ const TableContainer = () => {
     <TableHeader count={count} setCount={setCount} setSkip={setSkip} />
 
     <TablePaper>
-
       <Table items={bookings} />
       {areMoreBookings &&
         <LoaderBox>
