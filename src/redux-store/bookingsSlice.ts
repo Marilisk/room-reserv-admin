@@ -72,6 +72,7 @@ const bookingsSlice = createSlice({
                 state.loadingStatus = 'loaded'
                 state.items = action.payload.items
                 state.bookingsCount = action.payload.docsCount
+                state.serverMsg = ''
             })
             .addCase(fetchGetBooking.rejected, (state) => {
                 state.loadingStatus = 'error'
