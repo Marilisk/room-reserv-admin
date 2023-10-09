@@ -10,9 +10,10 @@ interface ITableHeaderProps {
     count: number
     setCount: (arg: number) => void
     setSkip: (arg: number) => void
+    setViewChanged: () => void
 }
 
-const TableHeader: FC<ITableHeaderProps> = ({ count, setCount, setSkip }: ITableHeaderProps) => {
+const TableHeader: FC<ITableHeaderProps> = ({ count, setCount, setSkip, setViewChanged }: ITableHeaderProps) => {
 
     const dispatch = useAppDispatch()
     const bookingsCount = useAppSelector(s => s.contracts.bookingsCount)
@@ -22,6 +23,7 @@ const TableHeader: FC<ITableHeaderProps> = ({ count, setCount, setSkip }: ITable
     const changeView = (value: number) => {
         setCount(value)
         setSkip(0)
+        setViewChanged()
     }
 
     const handleSort = (param: SortParamType) => {

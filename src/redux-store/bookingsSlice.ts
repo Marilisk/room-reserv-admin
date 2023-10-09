@@ -1,16 +1,31 @@
 import { RootState } from './store';
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import instance from '../api/api';
-import { IBookingPayload, IDeletePayload, IGetPayload, SortParamType } from '../types/types';
+import { IBooking, IBookingPayload, IDeletePayload, IGetPayload, SortParamType } from '../types/types';
 import { initialBookingState } from "./initial";
 import { createSelector } from '@reduxjs/toolkit'
 
 
 export const fetchGetBooking = createAsyncThunk(
     'booking/fetchGetBooking',
-    async ({ count, skip, rewrite }: IGetPayload) => {
+    async ({ count, skip, rewrite }:IGetPayload, thunkAPI) => {
         const response = await instance.get(`/bookings/${count}/${skip}`)
-        return { data: response.data, rewrite }
+        const state = thunkAPI.getState() as RootState
+        const sortBy:SortParamType = state.contracts.sortBy
+        const oldItems = state.contracts.items
+        const sorted = rewrite ? response.data.bookings : [...oldItems, ...response.data.bookings]
+        if (sortBy === 'createdAt') {
+            sorted.sort((a:IBooking, b:IBooking) => {
+                const aTs = new Date(a?.createdAt || 0).getTime()
+                const bTs = new Date(b?.createdAt || 0).getTime()
+                return aTs - bTs
+            })
+        } else {
+            sorted.sort((a:IBooking, b:IBooking) => {
+                return a.startDate - b.startDate
+            })
+        }
+        return { items: sorted, docsCount: response.data.docsCount, rewrite }
     })
 
 export const fetchAddBooking = createAsyncThunk('booking/fetchAddBooking', async (payload: IBookingPayload) => {
@@ -55,12 +70,8 @@ const bookingsSlice = createSlice({
         })
             .addCase(fetchGetBooking.fulfilled, (state, action) => {
                 state.loadingStatus = 'loaded'
-                if (action.payload.rewrite) {
-                    state.items = action.payload.data.bookings
-                } else {
-                    state.items = [...state.items, ...action.payload.data.bookings];
-                }
-                state.bookingsCount = action.payload.data.docsCount
+                state.items = action.payload.items
+                state.bookingsCount = action.payload.docsCount
             })
             .addCase(fetchGetBooking.rejected, (state) => {
                 state.loadingStatus = 'error'

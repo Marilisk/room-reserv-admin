@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux-store/hooks'
-import { fetchGetBooking } from '../../redux-store/bookingsSlice'
 import { Button, CircularProgress, Typography } from '@mui/material'
 import Table from './Table/Table'
 import { LoaderBox, TablePaper } from './Table/Table.styled'
 import TableHeader from './TableHeader/TableHeader'
+import { fetchGetBooking } from '../../redux-store/bookingsSlice'
 
 
 const TableContainer = () => {
@@ -18,20 +18,24 @@ const TableContainer = () => {
 
   const [count, setCount] = useState(5)
   const [skip, setSkip] = useState(0)
+  const [orderChanged, setOrderChanged] = useState(false)
+  const setViewChanged = () => {
+    setOrderChanged(!orderChanged)
+  }
 
   const loadMore = (rewrite: boolean) => {
     dispatch(fetchGetBooking({ count, skip, rewrite }))
-    setSkip(rewrite ? 0 : skip + count)
+    setSkip(skip + count)
   }
 
   useEffect(() => {
     loadMore(true)
-  }, [dispatch, count])
+  }, [orderChanged])
 
   if (isError) return <Typography>{errMsg}</Typography>
 
   return <>
-    <TableHeader count={count} setCount={setCount} setSkip={setSkip} />
+    <TableHeader count={count} setCount={setCount} setSkip={setSkip} setViewChanged={setViewChanged} />
 
     <TablePaper>
       <Table items={bookings} />
